@@ -2,6 +2,8 @@
 @source "../src";
 @import "tw-animate-css";
 
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@300;400;500;600&display=swap');
+
 @custom-variant dark (&:is(.dark *));
 
 /*
@@ -61,10 +63,24 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
+@theme inline {
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-ink: var(--ink);
+  --color-ivory: var(--ivory);
+}
+
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
+  --radius: 0.25rem;
+  /* Ivory canvas */
+  --background: oklch(0.985 0.005 80);
+  --foreground: oklch(0.18 0.01 60);
+  --ivory: oklch(0.985 0.005 80);
+  --ink: oklch(0.16 0.012 60);
+  --gold: oklch(0.74 0.12 70);
+  --gold-soft: oklch(0.88 0.06 75);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.129 0.042 264.695);
   --popover: oklch(1 0 0);
