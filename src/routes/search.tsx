@@ -107,7 +107,7 @@ function SearchPage() {
     else if (sort === "price-desc") sorted.sort((a, b) => b.price - a.price);
     else if (sort === "rating") sorted.sort((a, b) => b.rating - a.rating);
     return sorted;
-  }, [query, type, maxPrice, minRating, sort]);
+  }, [query, type, maxPrice, minRating, sort, dbListings]);
 
   const shown = results.slice(0, visible);
   const hasMore = visible < results.length;
