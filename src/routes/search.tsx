@@ -397,6 +397,7 @@ function ListingCard({
       transition={{ duration: 0.55, delay: Math.min(i * 0.04, 0.3), ease: [0.22, 1, 0.36, 1] }}
       className="group cursor-pointer"
     >
+      <Link to="/listing/$id" params={{ id: l.id }} className="block">
       <div className="relative overflow-hidden rounded-2xl aspect-[4/5] bg-ink/5">
         <motion.img
           src={l.image}
