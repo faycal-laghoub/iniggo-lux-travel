@@ -70,6 +70,27 @@ function SearchPage() {
   const [visible, setVisible] = useState(8);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [favs, setFavs] = useState<Set<string>>(new Set());
+  const [dbListings, setDbListings] = useState<Listing[]>([]);
+
+  useEffect(() => {
+    supabase.from("listings").select("id, title, type, location, price, cover_url, tags, rating")
+      .eq("status", "published")
+      .then(({ data }) => {
+        if (!data) return;
+        const mapped: Listing[] = data.map((d: any) => ({
+          id: d.id,
+          title: d.title,
+          location: d.location ?? "",
+          type: (d.type === "stay" ? "Stay" : d.type === "experience" ? "Experience" : "Activity") as Listing["type"],
+          tag: (d.tags?.[0] ?? d.type ?? "Curated"),
+          price: Number(d.price),
+          rating: Number(d.rating ?? 4.9),
+          reviews: 0,
+          image: d.cover_url ?? "",
+        }));
+        setDbListings(mapped);
+      });
+  }, []);
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
