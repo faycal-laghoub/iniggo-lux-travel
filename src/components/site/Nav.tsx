@@ -1,12 +1,13 @@
 import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { useAuth } from "@/hooks/useAuth";
+import { NotificationBell } from "./NotificationBell";
 
 const links = [
   { label: "Stays", to: "/search" },
   { label: "Experiences", to: "/search" },
+  { label: "Trips", to: "/trips" },
   { label: "Concierge", to: "/" },
-  { label: "Journal", to: "/" },
 ];
 
 export function Nav() {
@@ -35,9 +36,7 @@ export function Nav() {
               Dashboard
             </Link>
           )}
-          <button className="hidden md:inline text-[12px] uppercase tracking-[0.18em] text-ivory/70 hover:text-ivory transition-colors px-3">
-            FR / EN
-          </button>
+          <NotificationBell />
           <Link
             to={user ? "/account" : "/auth"}
             className="rounded-full bg-ivory text-ink px-5 py-2 text-[12px] uppercase tracking-[0.18em] hover:bg-gold transition-colors"

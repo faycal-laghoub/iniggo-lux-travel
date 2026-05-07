@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Search, MapPin, Calendar, Users, Star, SlidersHorizontal, X, Heart } from "lucide-react";
 import { Nav } from "@/components/site/Nav";
 import { Footer } from "@/components/site/Footer";
@@ -69,10 +70,32 @@ function SearchPage() {
   const [visible, setVisible] = useState(8);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [favs, setFavs] = useState<Set<string>>(new Set());
+  const [dbListings, setDbListings] = useState<Listing[]>([]);
+
+  useEffect(() => {
+    supabase.from("listings").select("id, title, type, location, price, cover_url, tags, rating")
+      .eq("status", "published")
+      .then(({ data }) => {
+        if (!data) return;
+        const mapped: Listing[] = data.map((d: any) => ({
+          id: d.id,
+          title: d.title,
+          location: d.location ?? "",
+          type: (d.type === "stay" ? "Stay" : d.type === "experience" ? "Experience" : "Activity") as Listing["type"],
+          tag: (d.tags?.[0] ?? d.type ?? "Curated"),
+          price: Number(d.price),
+          rating: Number(d.rating ?? 4.9),
+          reviews: 0,
+          image: d.cover_url ?? "",
+        }));
+        setDbListings(mapped);
+      });
+  }, []);
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
-    const filtered = ALL.filter((l) => {
+    const all = [...dbListings, ...ALL];
+    const filtered = all.filter((l) => {
       if (type !== "All" && l.type !== type) return false;
       if (l.price > maxPrice) return false;
       if (l.rating < minRating) return false;
@@ -84,7 +107,7 @@ function SearchPage() {
     else if (sort === "price-desc") sorted.sort((a, b) => b.price - a.price);
     else if (sort === "rating") sorted.sort((a, b) => b.rating - a.rating);
     return sorted;
-  }, [query, type, maxPrice, minRating, sort]);
+  }, [query, type, maxPrice, minRating, sort, dbListings]);
 
   const shown = results.slice(0, visible);
   const hasMore = visible < results.length;
@@ -374,6 +397,7 @@ function ListingCard({
       transition={{ duration: 0.55, delay: Math.min(i * 0.04, 0.3), ease: [0.22, 1, 0.36, 1] }}
       className="group cursor-pointer"
     >
+      <Link to="/listing/$id" params={{ id: l.id }} className="block">
       <div className="relative overflow-hidden rounded-2xl aspect-[4/5] bg-ink/5">
         <motion.img
           src={l.image}
@@ -422,6 +446,7 @@ function ListingCard({
         </p>
         <p className="text-[11px] text-ink/40">{l.reviews} reviews</p>
       </div>
+      </Link>
     </motion.article>
   );
 }
