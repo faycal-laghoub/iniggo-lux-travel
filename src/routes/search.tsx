@@ -94,7 +94,8 @@ function SearchPage() {
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
-    const filtered = ALL.filter((l) => {
+    const all = [...dbListings, ...ALL];
+    const filtered = all.filter((l) => {
       if (type !== "All" && l.type !== type) return false;
       if (l.price > maxPrice) return false;
       if (l.rating < minRating) return false;
