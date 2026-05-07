@@ -446,6 +446,7 @@ function ListingCard({
         </p>
         <p className="text-[11px] text-ink/40">{l.reviews} reviews</p>
       </div>
+      </Link>
     </motion.article>
   );
 }
