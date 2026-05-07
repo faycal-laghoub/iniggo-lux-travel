@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TripsRouteImport } from './routes/trips'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as AuthRouteImport } from './routes/auth'
@@ -17,6 +18,11 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ListingIdRouteImport } from './routes/listing.$id'
 import { Route as BookingBookingIdRouteImport } from './routes/booking.$bookingId'
 
+const TripsRoute = TripsRouteImport.update({
+  id: '/trips',
+  path: '/trips',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SearchRoute = SearchRouteImport.update({
   id: '/search',
   path: '/search',
@@ -59,6 +65,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/dashboard': typeof DashboardRoute
   '/search': typeof SearchRoute
+  '/trips': typeof TripsRoute
   '/booking/$bookingId': typeof BookingBookingIdRoute
   '/listing/$id': typeof ListingIdRoute
 }
@@ -68,6 +75,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/dashboard': typeof DashboardRoute
   '/search': typeof SearchRoute
+  '/trips': typeof TripsRoute
   '/booking/$bookingId': typeof BookingBookingIdRoute
   '/listing/$id': typeof ListingIdRoute
 }
@@ -78,6 +86,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/dashboard': typeof DashboardRoute
   '/search': typeof SearchRoute
+  '/trips': typeof TripsRoute
   '/booking/$bookingId': typeof BookingBookingIdRoute
   '/listing/$id': typeof ListingIdRoute
 }
@@ -89,6 +98,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/dashboard'
     | '/search'
+    | '/trips'
     | '/booking/$bookingId'
     | '/listing/$id'
   fileRoutesByTo: FileRoutesByTo
@@ -98,6 +108,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/dashboard'
     | '/search'
+    | '/trips'
     | '/booking/$bookingId'
     | '/listing/$id'
   id:
@@ -107,6 +118,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/dashboard'
     | '/search'
+    | '/trips'
     | '/booking/$bookingId'
     | '/listing/$id'
   fileRoutesById: FileRoutesById
@@ -117,12 +129,20 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   DashboardRoute: typeof DashboardRoute
   SearchRoute: typeof SearchRoute
+  TripsRoute: typeof TripsRoute
   BookingBookingIdRoute: typeof BookingBookingIdRoute
   ListingIdRoute: typeof ListingIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/trips': {
+      id: '/trips'
+      path: '/trips'
+      fullPath: '/trips'
+      preLoaderRoute: typeof TripsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/search': {
       id: '/search'
       path: '/search'
@@ -181,6 +201,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   DashboardRoute: DashboardRoute,
   SearchRoute: SearchRoute,
+  TripsRoute: TripsRoute,
   BookingBookingIdRoute: BookingBookingIdRoute,
   ListingIdRoute: ListingIdRoute,
 }
