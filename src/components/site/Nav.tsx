@@ -3,8 +3,8 @@ import { motion } from "framer-motion";
 import { useAuth } from "@/hooks/useAuth";
 
 const links = [
-  { label: "Stays", to: "/" },
-  { label: "Experiences", to: "/" },
+  { label: "Stays", to: "/search" },
+  { label: "Experiences", to: "/search" },
   { label: "Concierge", to: "/" },
   { label: "Journal", to: "/" },
 ];
