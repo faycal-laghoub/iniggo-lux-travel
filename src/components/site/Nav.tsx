@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
+import { useAuth } from "@/hooks/useAuth";
 
 const links = [
   { label: "Stays", to: "/" },
@@ -9,6 +10,7 @@ const links = [
 ];
 
 export function Nav() {
+  const { user } = useAuth();
   return (
     <motion.header
       initial={{ y: -20, opacity: 0 }}
@@ -31,9 +33,12 @@ export function Nav() {
           <button className="hidden md:inline text-[12px] uppercase tracking-[0.18em] text-ivory/70 hover:text-ivory transition-colors px-3">
             FR / EN
           </button>
-          <button className="rounded-full bg-ivory text-ink px-5 py-2 text-[12px] uppercase tracking-[0.18em] hover:bg-gold transition-colors">
-            Sign in
-          </button>
+          <Link
+            to={user ? "/account" : "/auth"}
+            className="rounded-full bg-ivory text-ink px-5 py-2 text-[12px] uppercase tracking-[0.18em] hover:bg-gold transition-colors"
+          >
+            {user ? "Account" : "Sign in"}
+          </Link>
         </div>
       </div>
     </motion.header>
