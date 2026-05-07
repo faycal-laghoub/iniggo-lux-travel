@@ -30,6 +30,11 @@ export function Nav() {
           ))}
         </nav>
         <div className="flex items-center gap-2">
+          {user && (
+            <Link to="/dashboard" className="hidden md:inline text-[12px] uppercase tracking-[0.18em] text-ivory/70 hover:text-gold transition-colors px-3">
+              Dashboard
+            </Link>
+          )}
           <button className="hidden md:inline text-[12px] uppercase tracking-[0.18em] text-ivory/70 hover:text-ivory transition-colors px-3">
             FR / EN
           </button>
