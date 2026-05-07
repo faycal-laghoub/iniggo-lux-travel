@@ -1,12 +1,13 @@
 import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { useAuth } from "@/hooks/useAuth";
+import { NotificationBell } from "./NotificationBell";
 
 const links = [
   { label: "Stays", to: "/search" },
   { label: "Experiences", to: "/search" },
+  { label: "Trips", to: "/trips" },
   { label: "Concierge", to: "/" },
-  { label: "Journal", to: "/" },
 ];
 
 export function Nav() {
