@@ -153,8 +153,33 @@
     border-color: var(--color-border);
   }
 
-  body {
+  html, body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+  }
+}
+
+@layer utilities {
+  .glass {
+    background: color-mix(in oklab, var(--ivory) 60%, transparent);
+    backdrop-filter: blur(20px) saturate(140%);
+    border: 1px solid color-mix(in oklab, var(--ink) 8%, transparent);
+  }
+  .glass-dark {
+    background: color-mix(in oklab, var(--ink) 40%, transparent);
+    backdrop-filter: blur(24px) saturate(160%);
+    border: 1px solid color-mix(in oklab, var(--ivory) 14%, transparent);
+  }
+  .text-balance { text-wrap: balance; }
+  .gold-line {
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
   }
 }
