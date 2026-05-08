@@ -1,6 +1,11 @@
+import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 
-export default function IndexPage() {
+export const Route = createFileRoute("/")({
+  component: Home,
+});
+
+function Home() {
   const [search, setSearch] = useState("");
 
   return (
