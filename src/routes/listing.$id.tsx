@@ -89,7 +89,7 @@ function ListingDetail() {
     }).select("id").single();
     setSubmitting(false);
     if (error) { toast.error(error.message); return; }
-    navigate({ to: "/booking/$bookingId", params: { bookingId: data!.id } });
+    navigate({ to: "/checkout/$bookingId", params: { bookingId: data!.id } });
   };
 
   if (loading) return <div className="min-h-screen grid place-items-center text-muted-foreground">Loading…</div>;

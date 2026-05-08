@@ -18,12 +18,14 @@ export type Database = {
         Row: {
           check_in: string | null
           check_out: string | null
+          commission_rate: number
           created_at: string
           currency: string
           id: string
           listing_id: string
           notes: string | null
           owner_id: string
+          payment_status: Database["public"]["Enums"]["payment_status"]
           status: Database["public"]["Enums"]["booking_status"]
           total_price: number
           traveler_id: string
@@ -33,12 +35,14 @@ export type Database = {
         Insert: {
           check_in?: string | null
           check_out?: string | null
+          commission_rate?: number
           created_at?: string
           currency?: string
           id?: string
           listing_id: string
           notes?: string | null
           owner_id: string
+          payment_status?: Database["public"]["Enums"]["payment_status"]
           status?: Database["public"]["Enums"]["booking_status"]
           total_price?: number
           traveler_id: string
@@ -48,12 +52,14 @@ export type Database = {
         Update: {
           check_in?: string | null
           check_out?: string | null
+          commission_rate?: number
           created_at?: string
           currency?: string
           id?: string
           listing_id?: string
           notes?: string | null
           owner_id?: string
+          payment_status?: Database["public"]["Enums"]["payment_status"]
           status?: Database["public"]["Enums"]["booking_status"]
           total_price?: number
           traveler_id?: string
@@ -162,6 +168,80 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      payments: {
+        Row: {
+          amount: number
+          booking_id: string
+          created_at: string
+          currency: string
+          failure_reason: string | null
+          id: string
+          owner_id: string
+          paid_at: string | null
+          payment_method: string | null
+          platform_fee: number
+          receipt_url: string | null
+          refunded_at: string | null
+          status: Database["public"]["Enums"]["payment_status"]
+          stripe_charge_id: string | null
+          stripe_payment_intent_id: string | null
+          stripe_transfer_id: string | null
+          traveler_id: string
+          updated_at: string
+          vendor_earnings: number
+        }
+        Insert: {
+          amount?: number
+          booking_id: string
+          created_at?: string
+          currency?: string
+          failure_reason?: string | null
+          id?: string
+          owner_id: string
+          paid_at?: string | null
+          payment_method?: string | null
+          platform_fee?: number
+          receipt_url?: string | null
+          refunded_at?: string | null
+          status?: Database["public"]["Enums"]["payment_status"]
+          stripe_charge_id?: string | null
+          stripe_payment_intent_id?: string | null
+          stripe_transfer_id?: string | null
+          traveler_id: string
+          updated_at?: string
+          vendor_earnings?: number
+        }
+        Update: {
+          amount?: number
+          booking_id?: string
+          created_at?: string
+          currency?: string
+          failure_reason?: string | null
+          id?: string
+          owner_id?: string
+          paid_at?: string | null
+          payment_method?: string | null
+          platform_fee?: number
+          receipt_url?: string | null
+          refunded_at?: string | null
+          status?: Database["public"]["Enums"]["payment_status"]
+          stripe_charge_id?: string | null
+          stripe_payment_intent_id?: string | null
+          stripe_transfer_id?: string | null
+          traveler_id?: string
+          updated_at?: string
+          vendor_earnings?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -273,7 +353,18 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      vendor_earnings: {
+        Row: {
+          currency: string | null
+          gross_revenue: number | null
+          net_earnings: number | null
+          owner_id: string | null
+          paid_count: number | null
+          pending_revenue: number | null
+          total_fees: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       has_role: {
@@ -294,6 +385,13 @@ export type Database = {
         | "completed"
       listing_status: "draft" | "published" | "archived"
       listing_type: "stay" | "experience" | "activity" | "tour" | "package"
+      payment_status:
+        | "pending"
+        | "processing"
+        | "paid"
+        | "failed"
+        | "refunded"
+        | "cancelled"
       quote_status: "open" | "responded" | "accepted" | "declined" | "closed"
     }
     CompositeTypes: {
@@ -432,6 +530,14 @@ export const Constants = {
       ],
       listing_status: ["draft", "published", "archived"],
       listing_type: ["stay", "experience", "activity", "tour", "package"],
+      payment_status: [
+        "pending",
+        "processing",
+        "paid",
+        "failed",
+        "refunded",
+        "cancelled",
+      ],
       quote_status: ["open", "responded", "accepted", "declined", "closed"],
     },
   },

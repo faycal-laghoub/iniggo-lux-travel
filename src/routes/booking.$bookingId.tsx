@@ -99,8 +99,13 @@ function BookingConfirmation() {
             </div>
           </div>
 
-          <div className="flex gap-3 justify-center mt-8">
-            <Link to="/trips"><Button variant="outline">View my trips <ArrowRight className="h-3 w-3 ml-2" /></Button></Link>
+          <div className="flex gap-3 justify-center mt-8 flex-wrap">
+            {booking.payment_status !== "paid" && (
+              <Link to="/checkout/$bookingId" params={{ bookingId: booking.id }}>
+                <Button className="bg-gold text-ink hover:bg-gold/90">Complete payment <ArrowRight className="h-3 w-3 ml-2" /></Button>
+              </Link>
+            )}
+            <Link to="/trips"><Button variant="outline">View my trips</Button></Link>
             <Link to="/search"><Button className="bg-ink text-ivory hover:bg-ink/90">Continue exploring</Button></Link>
           </div>
         </motion.div>
