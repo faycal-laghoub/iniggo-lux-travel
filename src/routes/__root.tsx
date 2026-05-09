@@ -74,14 +74,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
+      { title: "inigGO Luxe Travel Marketplace" },
+      { name: "description", content: "Premium B2B2C travel booking platform connecting travelers, agencies, luxury stays and curated experiences across the world." },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { property: "og:title", content: "inigGO Luxe Travel Marketplace" },
+      { property: "og:description", content: "Premium B2B2C travel booking platform connecting travelers, agencies, luxury stays and curated experiences across the world." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "inigGO Luxe Travel Marketplace" },
+      { name: "twitter:description", content: "Premium B2B2C travel booking platform connecting travelers, agencies, luxury stays and curated experiences across the world." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/dbdbe7a5-c07c-4de3-abfb-731ef6e82fa1/id-preview-df84597d--c4080a43-cc1c-4d60-b75e-8812b5a3e924.lovable.app-1778269444591.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/dbdbe7a5-c07c-4de3-abfb-731ef6e82fa1/id-preview-df84597d--c4080a43-cc1c-4d60-b75e-8812b5a3e924.lovable.app-1778269444591.png" },
     ],
     links: [
       {
