@@ -491,8 +491,14 @@ function EditListingForm({ listing, onDone }: { listing: Listing; onDone: () => 
 
 /* ---------------- BOOKINGS ---------------- */
 function BookingsTab({ bookings, onChanged }: { bookings: Booking[]; onChanged: () => void }) {
+  const { user } = useAuth();
   const setStatus = async (id: string, status: string) => {
-    const { error } = await supabase.from("bookings").update({ status: status as any }).eq("id", id);
+    if (!user) return;
+    const { error } = await supabase
+      .from("bookings")
+      .update({ status: status as any })
+      .eq("id", id)
+      .eq("owner_id", user.id);
     if (error) toast.error(error.message); else { toast.success(`Booking ${status}`); onChanged(); }
   };
 
