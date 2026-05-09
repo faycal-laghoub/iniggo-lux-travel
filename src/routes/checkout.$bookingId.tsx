@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { useAuth } from "@/hooks/useAuth";
 
 export const Route = createFileRoute("/checkout/$bookingId")({
   component: Checkout,
@@ -18,22 +19,29 @@ export const Route = createFileRoute("/checkout/$bookingId")({
 function Checkout() {
   const { bookingId } = Route.useParams();
   const navigate = useNavigate();
+  const { user, loading: authLoading } = useAuth();
   const [booking, setBooking] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [processing, setProcessing] = useState(false);
   const [method, setMethod] = useState<"card" | "stripe_link">("card");
 
   useEffect(() => {
+    if (authLoading) return;
+    if (!user) {
+      window.location.href = "/auth";
+      return;
+    }
     (async () => {
       const { data } = await supabase
         .from("bookings")
         .select("*, listings(title, location, country, cover_url, type)")
         .eq("id", bookingId)
+        .eq("traveler_id", user.id)
         .maybeSingle();
       setBooking(data);
       setLoading(false);
     })();
-  }, [bookingId]);
+  }, [bookingId, user, authLoading]);
 
   const totals = useMemo(() => {
     if (!booking) return null;
@@ -45,13 +53,17 @@ function Checkout() {
   }, [booking]);
 
   async function handlePay() {
-    if (!booking || !totals) return;
+    if (!booking || !totals || !user) return;
+    if (booking.traveler_id !== user.id) {
+      toast.error("You are not the traveler for this booking.");
+      return;
+    }
     setProcessing(true);
     try {
       // Mock payment intent — Stripe integration goes here later
       const { error } = await supabase.from("payments").insert({
         booking_id: booking.id,
-        traveler_id: booking.traveler_id,
+        traveler_id: user.id,
         owner_id: booking.owner_id,
         amount: totals.amount,
         currency: booking.currency || "EUR",
@@ -61,12 +73,6 @@ function Checkout() {
         payment_method: method,
       });
       if (error) throw error;
-
-      // Update booking payment status (mock — real flow waits for Stripe webhook)
-      await supabase
-        .from("bookings")
-        .update({ payment_status: "pending" })
-        .eq("id", booking.id);
 
       toast.success("Payment intent created", {
         description: "Stripe integration coming soon — booking saved.",

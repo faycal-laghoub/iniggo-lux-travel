@@ -7,6 +7,7 @@ import { Footer } from "@/components/site/Footer";
 import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
 
 export const Route = createFileRoute("/booking/$bookingId")({
   component: BookingConfirmation,
@@ -14,20 +15,27 @@ export const Route = createFileRoute("/booking/$bookingId")({
 
 function BookingConfirmation() {
   const { bookingId } = Route.useParams();
+  const { user, loading: authLoading } = useAuth();
   const [booking, setBooking] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (authLoading) return;
+    if (!user) {
+      window.location.href = "/auth";
+      return;
+    }
     (async () => {
       const { data } = await supabase
         .from("bookings")
         .select("*, listings(title, location, country, cover_url, type)")
         .eq("id", bookingId)
+        .or(`traveler_id.eq.${user.id},owner_id.eq.${user.id}`)
         .maybeSingle();
       setBooking(data);
       setLoading(false);
     })();
-  }, [bookingId]);
+  }, [bookingId, user, authLoading]);
 
   if (loading) return <div className="min-h-screen grid place-items-center text-muted-foreground">Loading…</div>;
 
