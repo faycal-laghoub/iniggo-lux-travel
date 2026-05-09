@@ -45,8 +45,13 @@ function TripsPage() {
   useEffect(() => { refresh(); /* eslint-disable-next-line */ }, [user]);
 
   const cancel = async (id: string) => {
+    if (!user) return;
     if (!confirm("Cancel this booking?")) return;
-    const { error } = await supabase.from("bookings").update({ status: "cancelled" }).eq("id", id);
+    const { error } = await supabase
+      .from("bookings")
+      .update({ status: "cancelled" })
+      .eq("id", id)
+      .eq("traveler_id", user.id);
     if (error) toast.error(error.message); else { toast.success("Booking cancelled"); refresh(); }
   };
 
