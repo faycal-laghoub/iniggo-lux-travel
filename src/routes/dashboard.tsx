@@ -548,20 +548,23 @@ function BookingsTab({ bookings, onChanged }: { bookings: Booking[]; onChanged: 
 
 /* ---------------- QUOTES ---------------- */
 function QuotesTab({ quotes, onChanged }: { quotes: Quote[]; onChanged: () => void }) {
+  const { user } = useAuth();
   const [responding, setResponding] = useState<string | null>(null);
   const [response, setResponse] = useState("");
   const [price, setPrice] = useState("");
 
   const send = async (id: string) => {
+    if (!user) return;
     const { error } = await supabase.from("quote_requests").update({
       response, quoted_price: price ? Number(price) : null, status: "responded",
-    }).eq("id", id);
+    }).eq("id", id).eq("owner_id", user.id);
     if (error) toast.error(error.message);
     else { toast.success("Quote sent"); setResponding(null); setResponse(""); setPrice(""); onChanged(); }
   };
 
   const decline = async (id: string) => {
-    const { error } = await supabase.from("quote_requests").update({ status: "declined" }).eq("id", id);
+    if (!user) return;
+    const { error } = await supabase.from("quote_requests").update({ status: "declined" }).eq("id", id).eq("owner_id", user.id);
     if (error) toast.error(error.message); else { toast.success("Declined"); onChanged(); }
   };
 
