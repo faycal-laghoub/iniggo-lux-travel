@@ -54,28 +54,17 @@ function Checkout() {
     return { amount, rate, platformFee, vendorEarnings };
   }, [booking]);
 
+  const payIntent = useServerFn(createPaymentIntent);
+
   async function handlePay() {
-    if (!booking || !totals || !user) return;
+    if (!booking || !user) return;
     if (booking.traveler_id !== user.id) {
       toast.error("You are not the traveler for this booking.");
       return;
     }
     setProcessing(true);
     try {
-      // Mock payment intent — Stripe integration goes here later
-      const { error } = await supabase.from("payments").insert({
-        booking_id: booking.id,
-        traveler_id: user.id,
-        owner_id: booking.owner_id,
-        amount: totals.amount,
-        currency: booking.currency || "EUR",
-        platform_fee: totals.platformFee,
-        vendor_earnings: totals.vendorEarnings,
-        status: "pending",
-        payment_method: method,
-      });
-      if (error) throw error;
-
+      await payIntent({ data: { bookingId: booking.id, paymentMethod: method } });
       toast.success("Payment intent created", {
         description: "Stripe integration coming soon — booking saved.",
       });
