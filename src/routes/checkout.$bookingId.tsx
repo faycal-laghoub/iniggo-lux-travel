@@ -11,6 +11,8 @@ import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
+import { useServerFn } from "@tanstack/react-start";
+import { createPaymentIntent } from "@/lib/payments.functions";
 
 export const Route = createFileRoute("/checkout/$bookingId")({
   component: Checkout,
